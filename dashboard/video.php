@@ -133,76 +133,76 @@ $conn->close();
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-    .video-container {
-        position: relative;
-        padding-bottom: 56.25%;
-        /* 16:9 aspect ratio */
-        height: 0;
-        overflow: hidden;
-        max-width: 100%;
-        background: #000;
-        border-radius: 8px;
-    }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 8px;
+        }
 
-    .video-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
 
-    .video-description {
-        background-color: #f8f9fa;
-        /* Light gray background */
-        padding: 15px;
-        /* Add padding around the text */
-        border-radius: 8px;
-        /* Optional: rounded corners */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        /* Optional: subtle shadow */
-        margin-top: 15px;
-        /* Optional: spacing from the top */
-    }
+        .video-description {
+            background-color: #f8f9fa;
+            /* Light gray background */
+            padding: 15px;
+            /* Add padding around the text */
+            border-radius: 8px;
+            /* Optional: rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Optional: subtle shadow */
+            margin-top: 15px;
+            /* Optional: spacing from the top */
+        }
 
-    .notes-container {
-        padding: 15px;
-        /* Add padding around the text */
-        border-radius: 8px;
-        /* Optional: rounded corners */
-        margin-top: 15px;
-        /* Optional: spacing from the top */
-    }
+        .notes-container {
+            padding: 15px;
+            /* Add padding around the text */
+            border-radius: 8px;
+            /* Optional: rounded corners */
+            margin-top: 15px;
+            /* Optional: spacing from the top */
+        }
 
-    .notes-container textarea {
-        width: 100%;
-        height: 320px;
-        padding: 10px;
-        border: 1px solid #ced4da;
-        border-radius: 8px;
-        resize: none;
-    }
+        .notes-container textarea {
+            width: 100%;
+            height: 320px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            resize: none;
+        }
 
-    .text-success {
-        color: #28a745;
-    }
+        .text-success {
+            color: #28a745;
+        }
 
-    .text-danger {
-        color: #dc3545;
-    }
+        .text-danger {
+            color: #dc3545;
+        }
 
-    .text-warning {
-        color: #ffc107;
-    }
+        .text-warning {
+            color: #ffc107;
+        }
 
-    .button-container {
-        text-align: right;
-    }
+        .button-container {
+            text-align: right;
+        }
 
-    .back-button {
-        margin-bottom: 15px;
-        /* Space between button and title */
-    }
+        .back-button {
+            margin-bottom: 15px;
+            /* Space between button and title */
+        }
     </style>
 </head>
 
@@ -217,18 +217,15 @@ $conn->close();
 
                         <a href="javascript:history.back()" class="btn btn-secondary back-button m-0">Back</a>
                         <!-- Bookmark Button -->
-                        <button id="bookmark-btn"
-                            class="btn  <?php echo $bookmarked ? 'btn-primary' : 'btn-outline-primary'; ?>"
-                            data-video-id="<?php echo htmlspecialchars($id_video); ?>">
+                        <button id="bookmark-btn" class="btn  <?php echo $bookmarked ? 'btn-primary' : 'btn-outline-primary'; ?>" data-video-id="<?php echo htmlspecialchars($id_video); ?>">
                             <i class="bi <?php echo $bookmarked ? 'bi-bookmark-check' : 'bi-bookmark'; ?>"></i>
                             <?php echo $bookmarked ? 'Bookmarked' : 'Bookmark'; ?>
                         </button>
                     </div>
                     <div class="video-container">
-                        <iframe src="<?php echo htmlspecialchars($embed_url); ?>" frameborder="0"
-                            allowfullscreen></iframe>
+                        <iframe src="<?php echo htmlspecialchars($embed_url); ?>" frameborder="0" allowfullscreen></iframe>
                     </div>
-                    <h2><?php echo htmlspecialchars($video['judul_video']); ?></h2>
+                    <h2 class="my-2"><?php echo htmlspecialchars($video['judul_video']); ?></h2>
                     <p><strong>Praktikum:</strong> <?php echo htmlspecialchars($video['nama_praktikum']); ?></p>
                     <p><strong>Uploaded At:</strong>
                         <?php echo htmlspecialchars(date('d M Y', strtotime($video['created_at']))); ?></p>
@@ -238,13 +235,11 @@ $conn->close();
                     <div class="notes-container">
                         <h3>Notes</h3>
                         <form action="save_notes.php" method="post">
-                            <textarea name="notes"
-                                placeholder="Write your notes here..."><?php echo htmlspecialchars($user_notes); ?></textarea>
+                            <textarea name="notes" placeholder="Write your notes here..."><?php echo htmlspecialchars($user_notes); ?></textarea>
                             <input type="hidden" name="video_id" value="<?php echo htmlspecialchars($id_video); ?>">
                             <input type="hidden" name="save_note" value="1">
                             <div class="button-container">
-                                <button type="submit" class="btn btn-primary mt-2"
-                                    style="background-color: #012970">Save Notes</button>
+                                <button type="submit" class="btn btn-primary mt-2" style="background-color: #012970">Save Notes</button>
                             </div>
                         </form>
                     </div>
@@ -256,14 +251,14 @@ $conn->close();
 
                 <div class="col-8">
                     <?php foreach ($comments as $comment) { ?>
-                    <div class="card p-3 mb-2">
+                        <div class="card p-3 mb-2">
 
-                        <div class="d-flex  justify-content-between">
-                            <p class="m-0 p-0 fw-bold" style="font-size: 20px;"><?= $comment['name'] ?></p>
-                            <p class="m-0 p-0"><?= $comment['created_at'] ?></p>
+                            <div class="d-flex  justify-content-between">
+                                <p class="m-0 p-0 fw-bold" style="font-size: 20px;"><?= $comment['name'] ?></p>
+                                <p class="m-0 p-0"><?= $comment['created_at'] ?></p>
+                            </div>
+                            <p class="mt-2 p-0"><?= $comment['comment'] ?></p>
                         </div>
-                        <p class="mt-2 p-0"><?= $comment['comment'] ?></p>
-                    </div>
                     <?php } ?>
                 </div>
 
@@ -271,23 +266,22 @@ $conn->close();
             </div>
 
             <?php if ($isLogin) { ?>
-            <div class="row">
-                <div class="col-8">
-                    <form class="mt-4" method="post">
-                        <h5 class="mb-1">Tinggalkan Komentar</p>
-                            <textarea name="comment" id="comment" class="form-control" rows="5"></textarea>
+                <div class="row">
+                    <div class="col-8">
+                        <form class="mt-4" method="post">
+                            <h5 class="mb-1">Tinggalkan Komentar</p>
+                                <textarea name="comment" id="comment" class="form-control" rows="5"></textarea>
 
-                            <button type="submit" name="submit" class="btn btn-primary mt-3 w-100"
-                                style="background-color: #012970">Kirim</button>
-                    </form>
+                                <button type="submit" name="submit" class="btn btn-primary mt-3 w-100" style="background-color: #012970">Kirim</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
             <?php } else { ?>
 
-            <div>
-                <p class="mt-4">Kamu harus login terlebih dahulu</p>
-                <a href="login.php" class="btn btn-primary">Login</a>
-            </div>
+                <div>
+                    <p class="mt-4">Kamu harus login terlebih dahulu</p>
+                    <a href="login.php" class="btn btn-primary">Login</a>
+                </div>
 
             <?php } ?>
         </div>
@@ -311,36 +305,36 @@ $conn->close();
     <script src="assets/js/main.js"></script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const bookmarkButton = document.getElementById('bookmark-btn');
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookmarkButton = document.getElementById('bookmark-btn');
 
-        bookmarkButton.addEventListener('click', function() {
-            const videoId = bookmarkButton.getAttribute('data-video-id');
+            bookmarkButton.addEventListener('click', function() {
+                const videoId = bookmarkButton.getAttribute('data-video-id');
 
-            fetch('bookmark.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        'video_id': videoId,
-                    }),
-                })
-                .then(response => response.text())
-                .then(status => {
-                    if (status === 'bookmarked') {
-                        bookmarkButton.innerHTML =
-                            '<i class="bi bi-bookmark-check"></i> Bookmarked';
-                        bookmarkButton.classList.remove('btn-outline-primary');
-                        bookmarkButton.classList.add('btn-primary');
-                    } else if (status === 'unbookmarked') {
-                        bookmarkButton.innerHTML = '<i class="bi bi-bookmark"></i> Bookmark';
-                        bookmarkButton.classList.remove('btn-primary');
-                        bookmarkButton.classList.add('btn-outline-primary');
-                    }
-                });
+                fetch('bookmark.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            'video_id': videoId,
+                        }),
+                    })
+                    .then(response => response.text())
+                    .then(status => {
+                        if (status === 'bookmarked') {
+                            bookmarkButton.innerHTML =
+                                '<i class="bi bi-bookmark-check"></i> Bookmarked';
+                            bookmarkButton.classList.remove('btn-outline-primary');
+                            bookmarkButton.classList.add('btn-primary');
+                        } else if (status === 'unbookmarked') {
+                            bookmarkButton.innerHTML = '<i class="bi bi-bookmark"></i> Bookmark';
+                            bookmarkButton.classList.remove('btn-primary');
+                            bookmarkButton.classList.add('btn-outline-primary');
+                        }
+                    });
+            });
         });
-    });
     </script>
 </body>
 
