@@ -1,6 +1,11 @@
 <?php
 session_start(); // Start the session
 
+$isLogin = false;
+
+if (isset($_SESSION['id'])) {
+    $isLogin = true;
+}
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -18,6 +23,13 @@ $conn = new mysqli($host, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// Comment
+$id = $_GET['id'];
+$comments = mysqli_query($conn, "SELECT * FROM comments WHERE id_video = '$id' ");
+
+
+
 
 // Check if id_video is set in the URL
 if (isset($_GET['id'])) {
@@ -80,6 +92,27 @@ if (isset($_SESSION['id'])) {
         $bookmarked = true;
     }
     $stmt->close();
+}
+
+
+if (isset($_POST['submit'])) {
+    $name = $_SESSION['fname'];
+    $comment = $_POST['comment'];
+
+
+    $query = "INSERT INTO comments (id,id_video,name,comment,created_at) VALUES ('','$id','$name','$comment', current_timestamp())";
+    $tambah = mysqli_query($conn, $query);
+    if (!$tambah) {
+        echo "<script>
+        alert('Gagal');
+        window.location = '';
+        </script>";
+    } else {
+        echo "<script>
+        alert('Sukses');
+        window.location = '';
+        </script>";
+    }
 }
 
 // Close the connection
@@ -217,7 +250,49 @@ $conn->close();
                     </div>
                 </div>
             </div>
+
+            <div class="mt-5 row">
+                <h1>Komentar</h1>
+
+                <div class="col-8">
+                    <?php foreach ($comments as $comment) { ?>
+                    <div class="card p-3 mb-2">
+
+                        <div class="d-flex  justify-content-between">
+                            <p class="m-0 p-0 fw-bold" style="font-size: 20px;"><?= $comment['name'] ?></p>
+                            <p class="m-0 p-0"><?= $comment['created_at'] ?></p>
+                        </div>
+                        <p class="mt-2 p-0"><?= $comment['comment'] ?></p>
+                    </div>
+                    <?php } ?>
+                </div>
+
+
+            </div>
+
+            <?php if ($isLogin) { ?>
+            <div class="row">
+                <div class="col-8">
+                    <form class="mt-4" method="post">
+                        <h5 class="mb-1">Tinggalkan Komentar</p>
+                            <textarea name="comment" id="comment" class="form-control" rows="5"></textarea>
+
+                            <button type="submit" name="submit" class="btn btn-primary mt-3 w-100"
+                                style="background-color: #012970">Kirim</button>
+                    </form>
+                </div>
+            </div>
+            <?php } else { ?>
+
+            <div>
+                <p class="mt-4">Kamu harus login terlebih dahulu</p>
+                <a href="login.php" class="btn btn-primary">Login</a>
+            </div>
+
+            <?php } ?>
         </div>
+
+
     </main>
 
     <?php include("include/footer.php"); ?>

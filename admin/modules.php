@@ -23,7 +23,7 @@ if ($conn->connect_error) {
 }
 
 // Pagination settings
-$results_per_page = 10; // Number of results per page
+$results_per_page = 1; // Number of results per page
 
 // Determine current page number
 if (isset($_GET['page']) && is_numeric($_GET['page'])) {
@@ -32,11 +32,21 @@ if (isset($_GET['page']) && is_numeric($_GET['page'])) {
     $current_page = 1; // Default to page 1
 }
 
+// Handle search query
+$search_query = '';
+if (isset($_GET['search'])) {
+    $search_query = $conn->real_escape_string($_GET['search']);
+}
+
 // Calculate the limit clause for SQL query
 $start_index = ($current_page - 1) * $results_per_page;
 
-// Fetch data for courses table with pagination
-$sql_modules = "SELECT * FROM modules LIMIT $start_index, $results_per_page";
+// Fetch data for modules table with pagination and search filter
+$sql_modules = "SELECT * FROM modules";
+if (!empty($search_query)) {
+    $sql_modules .= " WHERE nama_praktikum LIKE '%$search_query%'";
+}
+$sql_modules .= " LIMIT $start_index, $results_per_page";
 $result_modules = $conn->query($sql_modules);
 
 if (!$result_modules) {
@@ -45,6 +55,9 @@ if (!$result_modules) {
 
 // Count total number of modules (for pagination)
 $sql_count = "SELECT COUNT(*) AS total FROM modules";
+if (!empty($search_query)) {
+    $sql_count .= " WHERE nama_praktikum LIKE '%$search_query%'";
+}
 $result_count = $conn->query($sql_count);
 $row_count = $result_count->fetch_assoc();
 $total_modules = $row_count['total'];
@@ -63,20 +76,18 @@ $total_pages = ceil($total_modules / $results_per_page);
     <link href="../assets/img/jakarta-logo.png" rel="icon">
     <link href="../assets/img/jakarta-logo.png" rel="apple-touch-icon">
     <link rel="stylesheet" href="assets/css/styles.min.css" />
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
     <style>
-    .card-img-top {
-        width: 286px;
-        height: 180px;
-        object-fit: cover;
-    }
+        .card-img-top {
+            width: 286px;
+            height: 180px;
+            object-fit: cover;
+        }
     </style>
 </head>
 
 <body>
-    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-        data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
         <?php include("sidebar.php"); ?>
         <div class="body-wrapper">
             <?php include("header.php"); ?>
@@ -85,9 +96,16 @@ $total_pages = ceil($total_modules / $results_per_page);
                     <div class="card-body">
                         <h5 class="card-title fw-semibold mb-4">Welcome back,
                             <?= htmlspecialchars($_SESSION['fname']) ?>!</h5>
-                        <div class="text-end mb-3">
-                            <a href="create_module.php" class="btn btn-primary">Add Module</a>
+                        <div class="d-flex justify-content-between mb-3">
+                            <form method="get" action="">
+                                <div class="input-group ">
+                                    <input type="text" class="form-control " name="search" placeholder="Search by Course Name" value="<?= htmlspecialchars($search_query) ?>">
+                                    <button class="btn btn-primary" type="submit">Search</button>
+                                </div>
+                            </form>
+                            <a href="create_module.php" class="btn btn-primary m-0">Add Module</a>
                         </div>
+
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -108,7 +126,7 @@ $total_pages = ceil($total_modules / $results_per_page);
                                         echo "<td>" . htmlspecialchars($row['nama_pertemuan']) . "</td>";
                                         echo "<td>" . htmlspecialchars($row['deskripsi']) . "</td>";
                                         // Display file link
-                                        $file_path = 'uploads/modules/' . htmlspecialchars($row['file_upload']);
+                                        $file_path = '../uploads/modules/' . htmlspecialchars($row['file_upload']);
                                         if (file_exists($file_path) && strtolower(pathinfo($file_path, PATHINFO_EXTENSION)) === 'pdf') {
                                             echo "<td><a href='$file_path' target='_blank'>View PDF</a></td>";
                                         } else {
@@ -130,14 +148,14 @@ $total_pages = ceil($total_modules / $results_per_page);
                                 <?php
                                 $prev_page = $current_page - 1;
                                 if ($prev_page >= 1) {
-                                    echo "<li class='page-item'><a class='page-link' href='?page=$prev_page'>Previous</a></li>";
+                                    echo "<li class='page-item'><a class='page-link' href='?page=$prev_page&search=" . urlencode($search_query) . "'>Previous</a></li>";
                                 }
                                 for ($page = 1; $page <= $total_pages; $page++) {
-                                    echo "<li class='page-item " . ($page == $current_page ? 'active' : '') . "'><a class='page-link' href='?page=$page'>$page</a></li>";
+                                    echo "<li class='page-item " . ($page == $current_page ? 'active' : '') . "'><a class='page-link' href='?page=$page&search=" . urlencode($search_query) . "'>$page</a></li>";
                                 }
                                 $next_page = $current_page + 1;
                                 if ($next_page <= $total_pages) {
-                                    echo "<li class='page-item'><a class='page-link' href='?page=$next_page'>Next</a></li>";
+                                    echo "<li class='page-item'><a class='page-link' href='?page=$next_page&search=" . urlencode($search_query) . "'>Next</a></li>";
                                 }
                                 ?>
                             </ul>
@@ -154,57 +172,57 @@ $total_pages = ceil($total_modules / $results_per_page);
     <script src="assets/libs/simplebar/dist/simplebar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    function confirmDeleteModule(moduleId) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You will not be able to recover this module!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                deleteModule(moduleId);
-            }
-        });
-    }
+        function confirmDeleteModule(moduleId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You will not be able to recover this module!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteModule(moduleId);
+                }
+            });
+        }
 
-    function deleteModule(moduleId) {
-        $.ajax({
-            type: 'POST',
-            url: 'delete_module.php',
-            data: {
-                id: moduleId
-            },
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: response.message,
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
+        function deleteModule(moduleId) {
+            $.ajax({
+                type: 'POST',
+                url: 'delete_module.php',
+                data: {
+                    id: moduleId
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message,
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: response.message,
+                        text: 'Failed to delete module. Please try again later.',
                     });
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Failed to delete module. Please try again later.',
-                });
-            }
-        });
-    }
+            });
+        }
     </script>
 </body>
 
