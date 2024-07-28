@@ -23,7 +23,7 @@ if ($conn->connect_error) {
 }
 
 // Pagination settings
-$results_per_page = 1; // Number of results per page
+$results_per_page = 10; // Number of results per page
 
 // Determine current page number
 if (isset($_GET['page']) && is_numeric($_GET['page'])) {
