@@ -23,7 +23,8 @@ if ($conn->connect_error) {
 }
 
 // Function to log activities
-function log_activity($conn, $user_id, $activity) {
+function log_activity($conn, $user_id, $activity)
+{
     $sql = "INSERT INTO activities (user_id, activity) VALUES (?, ?)";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
@@ -101,8 +102,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $target_path = $upload_dir . $file_name;
 
             if (move_uploaded_file($thumbnail['tmp_name'], $target_path)) {
-                // Update video data with new thumbnail path
-                $thumbnail_path = $target_path;
+                // Update video data with new thumbnail filename
+                $thumbnail_filename = $file_name;
 
                 $sql_update = "UPDATE videos 
                                SET judul_video=?, deskripsi_video=?, url_video=?, thumbnail=?, nama_praktikum=?, updated_at=NOW()
@@ -113,12 +114,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     die("Error in SQL update query: " . $conn->error);
                 }
 
-                $stmt_update->bind_param("sssssi", $judul_video, $deskripsi_video, $url_video, $thumbnail_path, $nama_praktikum, $id_video);
+                $stmt_update->bind_param("sssssi", $judul_video, $deskripsi_video, $url_video, $thumbnail_filename, $nama_praktikum, $id_video);
 
                 if ($stmt_update->execute()) {
                     $update_success = true;
-                    // Update $video array with new thumbnail path
-                    $video['thumbnail'] = $thumbnail_path;
+                    // Update $video array with new thumbnail filename
+                    $video['thumbnail'] = $thumbnail_filename;
                 } else {
                     echo "Error updating video: " . $conn->error;
                 }
@@ -174,16 +175,19 @@ $conn->close();
     <link href="../assets/img/jakarta-logo.png" rel="icon">
     <link href="../assets/img/jakarta-logo.png" rel="apple-touch-icon">
     <link rel="stylesheet" href="assets/css/styles.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        .img-thumbnail {
-            max-width: 200px; /* Adjust the max width as per your design */
-            max-height: 200px; /* Adjust the max height as per your design */
-            width: auto;
-            height: auto;
-        }
+    .img-thumbnail {
+        max-width: 200px;
+        /* Adjust the max width as per your design */
+        max-height: 200px;
+        /* Adjust the max height as per your design */
+        width: auto;
+        height: auto;
+    }
     </style>
 </head>
 
@@ -206,55 +210,58 @@ $conn->close();
                     <div class="card-body">
                         <h5 class="card-title fw-semibold mb-4">Edit Video</h5>
 
-                        <?php if ($update_success): ?>
+                        <?php if ($update_success) : ?>
                         <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Video updated successfully',
-                                    showConfirmButton: true,
-                                    confirmButtonText: 'OK'
-                                }).then(function() {
-                                    // Optional: You can reload the page here if needed
-                                    // location.reload();
-                                });
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Video updated successfully',
+                                showConfirmButton: true,
+                                confirmButtonText: 'OK'
+                            }).then(function() {
+                                // Optional: You can reload the page here if needed
+                                // location.reload();
                             });
+                        });
                         </script>
-                    <?php endif; ?>
-
-
+                        <?php endif; ?>
 
                         <form method="POST" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="judul_video" class="form-label">Judul Video</label>
-                                <input type="text" class="form-control" id="judul_video" name="judul_video" value="<?= htmlspecialchars($video['judul_video']) ?>" required>
+                                <input type="text" class="form-control" id="judul_video" name="judul_video"
+                                    value="<?= htmlspecialchars($video['judul_video']) ?>" required>
                             </div>
                             <div class="mb-3">
                                 <label for="deskripsi_video" class="form-label">Deskripsi Video</label>
-                                <textarea class="form-control" id="deskripsi_video" name="deskripsi_video" rows="3" required><?= htmlspecialchars($video['deskripsi_video']) ?></textarea>
+                                <textarea class="form-control" id="deskripsi_video" name="deskripsi_video" rows="3"
+                                    required><?= htmlspecialchars($video['deskripsi_video']) ?></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="url_video" class="form-label">URL Video</label>
-                                <input type="url" class="form-control" id="url_video" name="url_video" value="<?= htmlspecialchars($video['url_video']) ?>" required>
+                                <input type="url" class="form-control" id="url_video" name="url_video"
+                                    value="<?= htmlspecialchars($video['url_video']) ?>" required>
                             </div>
                             <div class="mb-3">
                                 <label for="nama_praktikum" class="form-label">Nama Praktikum</label>
                                 <select class="form-select" id="nama_praktikum" name="nama_praktikum" required>
-                                    <?php foreach ($praktikumOptions as $option): ?>
-                                        <option value="<?= htmlspecialchars($option) ?>" <?= $video['nama_praktikum'] === $option ? 'selected' : '' ?>>
-                                            <?= htmlspecialchars($option) ?>
-                                        </option>
+                                    <?php foreach ($praktikumOptions as $option) : ?>
+                                    <option value="<?= htmlspecialchars($option) ?>"
+                                        <?= $video['nama_praktikum'] === $option ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($option) ?>
+                                    </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="thumbnail" class="form-label">Thumbnail</label>
                                 <?php if (!empty($video['thumbnail'])): ?>
-                                    <div class="mb-3">
-                                        <img src="<?= htmlspecialchars($video['thumbnail']) ?>" alt="Current Thumbnail" class="img-thumbnail">
-                                    </div>
+                                <div class="mb-3">
+                                    <img src="uploads/thumbnails/<?= htmlspecialchars($video['thumbnail']) ?>"
+                                        alt="Current Thumbnail" class="img-thumbnail">
+                                </div>
                                 <?php endif; ?>
-                                <input type="file" class="form-control tes" id="thumbnail" name="thumbnail">
+                                <input type="file" class="form-control" id="thumbnail" name="thumbnail">
                             </div>
                             <button type="submit" class="btn btn-primary">Update Video</button>
                         </form>

@@ -77,76 +77,76 @@ $conn->close();
     <link href="./assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
     <style>
-        .accordion-button {
-            background-color: #4154f1;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 0.5rem;
-            transition: background-color 0.3s ease;
-        }
+    .accordion-button {
+        background-color: #4154f1;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 0.5rem;
+        transition: background-color 0.3s ease;
+    }
 
-        .accordion-button:not(.collapsed) {
-            background-color: #4154f1;
-            color: white;
-        }
+    .accordion-button:not(.collapsed) {
+        background-color: #4154f1;
+        color: white;
+    }
 
-        .accordion-button:hover {
-            background-color: #4154f1;
-            color: white;
-        }
+    .accordion-button:hover {
+        background-color: #4154f1;
+        color: white;
+    }
 
-        .accordion-body {
-            padding: 1rem;
-            background-color: #f9f9f9;
-            border-top: 1px solid #ddd;
-        }
+    .accordion-body {
+        padding: 1rem;
+        background-color: #f9f9f9;
+        border-top: 1px solid #ddd;
+    }
 
-        .accordion-body ul {
-            list-style-type: none;
-            padding: 0;
-        }
+    .accordion-body ul {
+        list-style-type: none;
+        padding: 0;
+    }
 
-        .accordion-body li {
-            margin-bottom: 10px;
-        }
+    .accordion-body li {
+        margin-bottom: 10px;
+    }
 
-        .accordion-body a {
-            text-decoration: none;
-            color: #4154f1;
-            font-weight: 500;
-        }
+    .accordion-body a {
+        text-decoration: none;
+        color: #4154f1;
+        font-weight: 500;
+    }
 
-        .accordion-body a:hover {
-            text-decoration: underline;
-        }
+    .accordion-body a:hover {
+        text-decoration: underline;
+    }
 
-        .fixed-size-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 0.5rem;
-        }
+    .fixed-size-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 0.5rem;
+    }
 
-        /* Set accordion width to be equal to the video card width */
-        .accordion-container {
-            max-width: 360px;
-            /* Adjust this value to match the video card width */
-            margin: 0;
-            /* Align the accordion to the left */
-        }
+    /* Set accordion width to be equal to the video card width */
+    .accordion-container {
+        max-width: 360px;
+        /* Adjust this value to match the video card width */
+        margin: 0;
+        /* Align the accordion to the left */
+    }
 
-        .card-link {
-            text-decoration: none;
-            color: inherit;
-        }
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+    }
 
-        .centered-heading {
-            text-align: center;
-            margin-bottom: 1rem;
-            /* Add some spacing below the heading if needed */
-        }
+    .centered-heading {
+        text-align: center;
+        margin-bottom: 1rem;
+        /* Add some spacing below the heading if needed */
+    }
     </style>
 </head>
 
@@ -164,11 +164,13 @@ $conn->close();
                     <div class="accordion" id="modulesAccordion">
                         <div class="accordion-item ">
                             <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                     Show Modules
                                 </button>
                             </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#modulesAccordion">
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                                data-bs-parent="#modulesAccordion">
                                 <div class="accordion-body">
                                     <ul>
                                         <?php
@@ -198,7 +200,8 @@ $conn->close();
                             echo '<a href="video.php?id=' . htmlspecialchars($row['id_video']) . '" class="card-link">';
                             echo '<div class="card">';
                             echo '<p>' . htmlspecialchars($row['nama_praktikum']) . '</p>';
-                            echo '<img src="data:image/jpeg;base64,' . base64_encode($row['thumbnail']) . '" class="fixed-size-img img-fluid" alt="Video Thumbnail">';
+                            echo '<img src="../admin/uploads/thumbnails/' . $row['thumbnail'] . '" class="fixed-size-img img-fluid" alt="">';
+
                             echo '<h3>' . htmlspecialchars($row['judul_video']) . '</h3>';
                             echo '<p>' . htmlspecialchars($row['deskripsi_video']) . '</p>';
                             echo '</div>';
@@ -241,7 +244,8 @@ $conn->close();
     ?>
 
     <!-- Scroll Top -->
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
     <script src="./assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -253,32 +257,32 @@ $conn->close();
     <script src="./assets/js/main.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var meetingLinks = document.querySelectorAll('.meeting-link');
-            var modalPraktikum = document.getElementById('modalPraktikum');
-            var modalPertemuan = document.getElementById('modalPertemuan');
-            var modalDeskripsi = document.getElementById('modalDeskripsi');
-            var modalFile = document.getElementById('modalFile');
-            var modalLink = document.getElementById('modalLink');
+    document.addEventListener('DOMContentLoaded', function() {
+        var meetingLinks = document.querySelectorAll('.meeting-link');
+        var modalPraktikum = document.getElementById('modalPraktikum');
+        var modalPertemuan = document.getElementById('modalPertemuan');
+        var modalDeskripsi = document.getElementById('modalDeskripsi');
+        var modalFile = document.getElementById('modalFile');
+        var modalLink = document.getElementById('modalLink');
 
-            meetingLinks.forEach(function(link) {
-                link.addEventListener('click', function() {
-                    var praktikum = link.getAttribute('data-praktikum');
-                    var pertemuan = link.getAttribute('data-pertemuan');
-                    var deskripsi = link.getAttribute('data-deskripsi');
-                    var fileName = link.getAttribute('data-file');
-                    var linkURL = link.getAttribute('data-link');
+        meetingLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                var praktikum = link.getAttribute('data-praktikum');
+                var pertemuan = link.getAttribute('data-pertemuan');
+                var deskripsi = link.getAttribute('data-deskripsi');
+                var fileName = link.getAttribute('data-file');
+                var linkURL = link.getAttribute('data-link');
 
-                    modalPraktikum.textContent = praktikum;
-                    modalPertemuan.textContent = pertemuan;
-                    modalDeskripsi.textContent = deskripsi;
-                    modalFile.innerHTML = fileName ? '<a href="../uploads/modules/' + fileName +
-                        '" target="_blank">' + fileName + '</a>' : 'Not available';
-                    modalLink.innerHTML = linkURL ? '<a href="' + linkURL + '" target="_blank">' +
-                        linkURL + '</a>' : 'Not available';
-                });
+                modalPraktikum.textContent = praktikum;
+                modalPertemuan.textContent = pertemuan;
+                modalDeskripsi.textContent = deskripsi;
+                modalFile.innerHTML = fileName ? '<a href="../uploads/modules/' + fileName +
+                    '" target="_blank">' + fileName + '</a>' : 'Not available';
+                modalLink.innerHTML = linkURL ? '<a href="' + linkURL + '" target="_blank">' +
+                    linkURL + '</a>' : 'Not available';
             });
         });
+    });
     </script>
 
 </body>

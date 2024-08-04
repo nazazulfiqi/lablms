@@ -67,14 +67,18 @@ $total_pages = ceil($total_videos / $results_per_page);
     <link href="../assets/img/jakarta-logo.png" rel="icon">
     <link href="../assets/img/jakarta-logo.png" rel="apple-touch-icon">
     <link rel="stylesheet" href="assets/css/styles.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
 
     <style>
-        .card-img-top {
-            width: 286px; /* Fixed width */
-            height: 180px; /* Fixed height */
-            object-fit: cover; /* Ensure the image covers the entire space */
-        }
+    .card-img-top {
+        width: 286px;
+        /* Fixed width */
+        height: 180px;
+        /* Fixed height */
+        object-fit: cover;
+        /* Ensure the image covers the entire space */
+    }
     </style>
 </head>
 
@@ -121,12 +125,10 @@ $total_pages = ceil($total_videos / $results_per_page);
                                         echo "<td>" . htmlspecialchars($row['judul_video']) . "</td>";
                                         echo "<td>" . htmlspecialchars($row['deskripsi_video']) . "</td>";
                                         
-                                        // Displaying image from BLOB data
-                                        $thumbnailData = $row['thumbnail'];
-                                        $thumbnailEncoded = base64_encode($thumbnailData);
-                                        $thumbnailSrc = 'data:image/jpeg;base64,' . $thumbnailEncoded;
+                                        // Displaying image from file path
+                                        $thumbnailPath = 'uploads/thumbnails/' . htmlspecialchars($row['thumbnail']);
                                         
-                                        echo "<td><img src='" . $thumbnailSrc . "' class='card-img-top' alt='Thumbnail'></td>";
+                                        echo "<td><img src='" . $thumbnailPath . "' class='card-img-top' alt='Thumbnail'></td>";
                                         
                                         echo "<td>" . htmlspecialchars($row['nama_praktikum']) . "</td>";
                                         echo "<td>
@@ -197,16 +199,19 @@ $total_pages = ceil($total_videos / $results_per_page);
                 $.ajax({
                     type: 'POST',
                     url: 'delete_video.php',
-                    data: { id: videoId }, // Pass videoId as data parameter
+                    data: {
+                        id: videoId
+                    }, // Pass videoId as data parameter
                     dataType: 'json',
-                    success: function (response) {
+                    success: function(response) {
                         if (response.status === 'success') {
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success!',
                                 text: response.message,
                             }).then((result) => {
-                                location.reload(); // Reload the page after successful deletion
+                                location
+                            .reload(); // Reload the page after successful deletion
                             });
                         } else {
                             Swal.fire({
@@ -216,7 +221,7 @@ $total_pages = ceil($total_videos / $results_per_page);
                             });
                         }
                     },
-                    error: function (xhr, status, error) {
+                    error: function(xhr, status, error) {
                         console.error('Error:', error);
                         Swal.fire({
                             icon: 'error',
@@ -228,7 +233,7 @@ $total_pages = ceil($total_videos / $results_per_page);
             }
         });
     }
-</script>
+    </script>
 
 </body>
 

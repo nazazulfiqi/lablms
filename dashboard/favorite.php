@@ -52,6 +52,7 @@ if (!$result) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -63,64 +64,76 @@ if (!$result) {
     <link href="./assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
     <style>
-        .fixed-size-img {
-            width: 100%;
-            height: 200px; /* Set your desired height */
-            object-fit: cover; /* Ensures the image covers the container while maintaining aspect ratio */
-        }
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            background-color: #fff;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .card-body {
-            padding: 1rem;
-        }
-        .card-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-        .card-text {
-            font-size: 1rem;
-            color: #555;
-        }
-        .card-link {
-            text-decoration: none;
-            color: inherit;
-        }
-        .card-link:hover {
-            color: #007bff;
-        }
-        .container {
-            margin-top: 2rem;
-        }
+    .fixed-size-img {
+        width: 100%;
+        height: 200px;
+        /* Set your desired height */
+        object-fit: cover;
+        /* Ensures the image covers the container while maintaining aspect ratio */
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        background-color: #fff;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        color: #555;
+    }
+
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .card-link:hover {
+        color: #007bff;
+    }
+
+    .container {
+        margin-top: 2rem;
+    }
     </style>
 </head>
+
 <body class="index-page">
 
-<main class="main">
-    <section id="values" class="values section">
-    <div class="container section-title mt-5" data-aos="fade-up">
-            <p>Bookmarked videos<br></p>
-        </div>
+    <main class="main">
+        <section id="values" class="values section">
+            <div class="container section-title mt-5" data-aos="fade-up">
+                <p>Bookmarked videos<br></p>
+            </div>
 
-        <div class="container">
-            <div class="row gy-4">
-                <?php
+            <div class="container">
+                <div class="row gy-4">
+                    <?php
                 if ($result->num_rows > 0) {
                     // Output data for each row
                     while ($row = $result->fetch_assoc()) {
                         echo '<div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">';
                         echo '<a href="video.php?id=' . $row['id_video'] . '" class="card-link">';
                         echo '<div class="card">';
-                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row['thumbnail']) . '" class="fixed-size-img img-fluid" alt="Thumbnail">';
+                        echo '<img src="../admin/uploads/thumbnails/' . $row['thumbnail'] . '" class="fixed-size-img img-fluid" alt="">';
+
                         echo '<div class="card-body">';
                         echo '<p class="card-text">' . htmlspecialchars($row['nama_praktikum']) . '</p>';
                         echo '<h3 class="card-title">' . htmlspecialchars($row['judul_video']) . '</h3>';
@@ -134,30 +147,32 @@ if (!$result) {
                     echo '<p>No bookmarked videos found.</p>';
                 }
                 ?>
+                </div>
             </div>
-        </div>
-    </section>
-</main>
+        </section>
+    </main>
 
-<?php
+    <?php
 include("include/footer.php");
 ?>
 
-<!-- Scroll Top -->
-<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
 
-<!-- Vendor JS Files -->
-<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/vendor/php-email-form/validate.js"></script>
-<script src="assets/vendor/aos/aos.js"></script>
-<script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-<script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-<script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
 
-<!-- Main JS File -->
-<script src="assets/js/main.js"></script>
+    <!-- Main JS File -->
+    <script src="assets/js/main.js"></script>
 
 </body>
+
 </html>
